@@ -175,7 +175,7 @@ async function _validateExpJsonAsync(
   }
   ProjectUtils.clearNotification(projectRoot, 'doctor-problem-checking-watchman-version');
 
-  if (!exp.runtimeVersion) {
+  if (exp.sdkVersion) {
     return await _validateSdkVersionAsync(
       exp,
       pkg,
