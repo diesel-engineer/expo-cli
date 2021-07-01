@@ -11,7 +11,7 @@ describe(getPublishExpConfigAsync, () => {
 
   const runtimeVersion = 'one';
   const sdkVersion = '40.0.0';
-  it('runtimeVersion', async () => {
+  it('throws if sdkVersion is not specified', async () => {
     vol.fromJSON(
       {
         'package.json': JSON.stringify({}),
@@ -25,10 +25,13 @@ describe(getPublishExpConfigAsync, () => {
       },
       'runtimeVersion'
     );
-    const config = await getPublishExpConfigAsync('runtimeVersion', { releaseChannel: 'default' });
-    expect(config.exp).toMatchObject({ sdkVersion: undefined, runtimeVersion });
+    await expect(
+      getPublishExpConfigAsync('runtimeVersion', { releaseChannel: 'default' })
+    ).rejects.toThrow(
+      'Config is missing an SDK version. See https://docs.expo.io/bare/installing-updates/'
+    );
   });
-  it('sdkVersion from node module', async () => {
+  it('reads sdkVersion from node module', async () => {
     vol.fromJSON(
       {
         'package.json': JSON.stringify({}),
@@ -47,7 +50,7 @@ describe(getPublishExpConfigAsync, () => {
     const config = await getPublishExpConfigAsync('sdkVersion', { releaseChannel: 'default' });
     expect(config.exp).toMatchObject({ sdkVersion });
   });
-  it('sdkVersion in app.json', async () => {
+  it('reads sdkVersion from app.json', async () => {
     vol.fromJSON(
       {
         'package.json': JSON.stringify({}),

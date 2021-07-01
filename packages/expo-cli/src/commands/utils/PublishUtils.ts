@@ -35,12 +35,11 @@ export type Publication = {
   channelId: string;
   publicationId: string;
   appVersion: string;
+  sdkVersion: string;
+  runtimeVersion?: string;
   publishedTime: string;
   platform: 'android' | 'ios';
-} & (
-  | { sdkVersion?: string; runtimeVersion: string }
-  | { sdkVersion: string; runtimeVersion?: string }
-);
+};
 
 export type PublicationDetail = {
   manifest?: {
@@ -52,7 +51,7 @@ export type PublicationDetail = {
   packageName: string;
   fullName: string;
   hash: string;
-  sdkVersion?: string;
+  sdkVersion: string;
   runtimeVersion?: string;
   s3Key: string;
   s3Url: string;

@@ -38,15 +38,24 @@ export async function getPublishExpConfigAsync(
     // enforce sdk validation if user is not using runtimeVersion
     skipSDKVersionRequirement: !!runtimeVersion,
   });
+  const { sdkVersion } = exp;
+  if (!sdkVersion) {
+    throw new Error(
+      'Config is missing an SDK version. See https://docs.expo.io/bare/installing-updates/'
+    );
+  }
 
   // Only allow projects to be published with UNVERSIONED if a correct token is set in env
-  if (exp.sdkVersion === 'UNVERSIONED' && !Env.maySkipManifestValidation()) {
+  if (sdkVersion === 'UNVERSIONED' && !Env.maySkipManifestValidation()) {
     throw new XDLError('INVALID_OPTIONS', 'Cannot publish with sdkVersion UNVERSIONED.');
   }
 
   exp.locales = await ExponentTools.getResolvedLocalesAsync(projectRoot, exp);
   return {
-    exp,
+    exp: {
+      ...exp,
+      sdkVersion: sdkVersion!,
+    },
     pkg,
     hooks,
   };

@@ -1,4 +1,4 @@
-import { ExpoAppManifestWithSdk } from '@expo/config';
+import { ExpoAppManifest } from '@expo/config';
 import JsonFile from '@expo/json-file';
 import fs from 'fs-extra';
 import path from 'path';
@@ -7,7 +7,7 @@ import { Project, XDLError } from 'xdl';
 
 import Log from '../../log';
 
-type SelfHostedIndex = ExpoAppManifestWithSdk & {
+type SelfHostedIndex = ExpoAppManifest & {
   dependencies: string[];
 };
 

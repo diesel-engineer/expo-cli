@@ -175,26 +175,12 @@ async function _validateExpJsonAsync(
   }
   ProjectUtils.clearNotification(projectRoot, 'doctor-problem-checking-watchman-version');
 
-  if (exp.sdkVersion) {
-    return await _validateSdkVersionAsync(
-      exp,
-      pkg,
-      projectRoot,
-      allowNetwork,
-      skipSDKVersionRequirement
+  const sdkVersion = exp.sdkVersion;
+  if (!sdkVersion) {
+    throw new Error(
+      'Config is missing an SDK version. See https://docs.expo.io/bare/installing-updates/'
     );
   }
-  return NO_ISSUES;
-}
-
-async function _validateSdkVersionAsync(
-  exp: ExpoConfig,
-  pkg: PackageJSONConfig,
-  projectRoot: string,
-  allowNetwork: boolean,
-  skipSDKVersionRequirement: boolean | undefined
-) {
-  const sdkVersion = exp.sdkVersion;
   const configName = configFilename(projectRoot);
 
   // Warn if sdkVersion is UNVERSIONED
