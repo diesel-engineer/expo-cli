@@ -61,7 +61,14 @@ export default function (program: Command) {
     .helpGroup('publish')
     .option('--channel-id <channel-id>', 'This flag is deprecated.')
     .option('-c, --release-channel <channel-name>', 'The channel to rollback from. (Required)')
-    .option('-s, --sdk-version <version>', 'The sdk version to rollback. (Required)')
+    .option(
+      '-s, --sdk-version <version>',
+      'The sdk version to rollback. (Required if runtime version is not specified)'
+    )
+    .option(
+      '-rtv, --runtime-version <version>',
+      'The runtime version to rollback. (Required if sdk version is not specified)'
+    )
     .option('-p, --platform <ios|android>', 'The platform to rollback.')
     .asyncActionProjectDir(
       async (
@@ -69,6 +76,7 @@ export default function (program: Command) {
         options: {
           releaseChannel?: string;
           sdkVersion?: string;
+          runtimeVersion?: string;
           platform?: string;
           channelId?: string;
         }
@@ -78,7 +86,7 @@ export default function (program: Command) {
             'This flag is deprecated and does not do anything. Please use --release-channel and --sdk-version instead.'
           );
         }
-        if (!options.releaseChannel || !options.sdkVersion) {
+        if (!options.releaseChannel || !(options.sdkVersion || options.runtimeVersion)) {
           const usage = await getUsageAsync(projectRoot);
           throw new Error(usage);
         }
